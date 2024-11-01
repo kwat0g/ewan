@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Your CSS styles here */
     * {
       margin: 0;
       padding: 0;
@@ -23,7 +24,6 @@
       justify-content: center;
       height: 100vh;
       overflow: hidden;
-      transition: background-color 0.3s, color 0.3s;
     }
 
     .modal {
@@ -37,18 +37,13 @@
       background: radial-gradient(circle at top left, rgba(73, 237, 0, 0.3), rgba(0, 0, 0, 0.85));
       align-items: center;
       justify-content: center;
-      animation: zoomIn 0.5s ease forwards;
     }
 
     .modal-content {
       background-color: #212121;
       width: 100%;
       height: 100%;
-      border-radius: 0;
-      text-align: center;
-      position: relative;
       color: #e0e0e0;
-      box-shadow: none;
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -62,15 +57,11 @@
       color: #49ed00;
     }
 
-    .modal-header .close {
+    .close {
       cursor: pointer;
       font-size: 1.8em;
       color: #49ed00;
       margin-right: 20px;
-    }
-
-    .modal-header .close:hover {
-      color: rgba(73, 237, 0, 0.7);
     }
 
     iframe {
@@ -78,7 +69,6 @@
       height: 100%;
       border: none;
       margin-top: 0;
-      box-shadow: none;
     }
 
     .spinner {
@@ -92,17 +82,10 @@
       display: none;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
     .nav-buttons {
       display: flex;
       justify-content: center;
       margin-top: 15px;
-      margin-bottom: 30px;
       gap: 30px;
     }
 
@@ -112,260 +95,91 @@
       color: #ffffff;
       background: none;
       border: none;
-      transition: color 0.3s;
-    }
-
-    .arrow-btn:hover {
-      color: #49ed00;
-    }
-
-    .go-btn {
-      cursor: pointer;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.3em;
-      color: #ffffff;
-      background-color: #333;
-      padding: 10px 20px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 0 8px rgba(73, 237, 0, 0.3);
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .go-btn:hover {
-      background-color: #49ed00;
-      color: #1a1a1a;
-    }
-
-    .fallback {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5em;
-      color: #ffffff;
-      text-align: center;
-      padding: 20px;
-      gap: 10px;
-      flex-direction: column;
-      animation: fadeIn 1s ease forwards;
-      text-shadow: 0 0 5px rgba(73, 237, 0, 0.6), 0 0 10px rgba(73, 237, 0, 0.4), 0 0 15px rgba(73, 237, 0, 0.2);
-      transform: translateY(10px);
-      animation: bounce 2s infinite;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes bounce {
-      0%,
-      20%,
-      50%,
-      80%,
-      100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-10px);
-      }
-      60% {
-        transform: translateY(-5px);
-      }
-    }
-
-    .show-modal-btn {
-      cursor: pointer;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.5em;
-      color: #ffffff;
-      background-color: transparent;
-      padding: 10px 20px;
-      border: 2px solid #49ed00;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 0 10px rgba(73, 237, 0, 0.5);
-      transition: transform 0.3s, box-shadow 0.3s;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%,
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 15px rgba(73, 237, 0, 0.5);
-      }
-      50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(73, 237, 0, 0.7);
-      }
-    }
-
-    .show-modal-btn:hover {
-      color: #49ed00;
-      background-color: rgba(73, 237, 0, 0.2);
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(73, 237, 0, 0.8), 0 0 30px rgba(73, 237, 0, 0.5);
-      border-color: #49ed00;
-    }
-
-    .toggle-auto-nav {
-      cursor: pointer;
-      font-size: 1em;
-      color: #ffffff;
-      background-color: transparent;
-      border: none;
-      margin-top: 15px;
-      padding: 5px 10px;
-      border: 2px solid #49ed00;
-      border-radius: 5px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .toggle-auto-nav:hover {
-      background-color: #49ed00;
-      color: #1a1a1a;
     }
   </style>
   <script>
     const referenceCode = 'aHR0cHM6Ly9wZXJpbGFzdHJvbmF1dC5jb20vbmFkbTV2NDF1P2tleT02ZmEzOGYzNTkxYjRjYzZlMTFkNTFlOWM0NjU1ZGZjZQ==';
 
     let links = [
-      'https://www.profitablecpmrate.com/vq7ktms6jb?key=5c9978b707da4810252e42cb5f721af0', // Dito ilalagay Direct Link
-      'https://www.profitablecpmrate.com/pum87zv1z?key=77c7b184a771b312e0e774039be509db', // Dito ilalagay Direct Link
-      'https://www.profitablecpmrate.com/jb2c0eztk1?key=80fa6e07716a979d9c8dc0128c6e4177', // Dito ilalagay Direct Link
-      'https://www.profitablecpmrate.com/jb3a7bvuk?key=13d258dedbb6d045292b94cf56d5b6d3' // Dito ilalagay Direct Link
-      
+      'https://www.profitablecpmrate.com/vq7ktms6jb?key=5c9978b707da4810252e42cb5f721af0',
+      'https://www.profitablecpmrate.com/pum87zv1z?key=77c7b184a771b312e0e774039be509db',
+      'https://www.profitablecpmrate.com/jb2c0eztk1?key=80fa6e07716a979d9c8dc0128c6e4177',
+      'https://www.profitablecpmrate.com/jb3a7bvuk?key=13d258dedbb6d045292b94cf56d5b6d3'
     ];
 
+    let currentIndex = 0;
     let autoNavigateInterval;
-    let isAutoNavigating = true; // Track auto-navigation state
 
-    function decodeReferenceCode() {
-      const decodedString = atob(referenceCode);
-      return decodedString.split('/')[1];
+    function decodeBase64(encoded) {
+      return decodeURIComponent(atob(encoded).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
     }
 
-    function showModal(link) {
-      const modal = document.querySelector('.modal');
-      const iframe = document.querySelector('iframe');
-      const spinner = document.querySelector('.spinner');
-      const currentLinkDisplay = document.querySelector('.modal-header span');
+    function refreshPage() {
+      location.reload(); // Refresh the page
+    }
 
-      currentLinkDisplay.innerText = link; // Display the current link
-      modal.style.display = 'flex'; // Show modal
-      spinner.style.display = 'block'; // Show spinner
-      iframe.src = link; // Set iframe src
+    function showLink(index) {
+      currentIndex = index;
+      const iframe = document.getElementById('modalIframe');
+      const modal = document.getElementById('myModal');
+      const spinner = document.getElementById('spinner');
+      iframe.src = getCurrentLink();
+      modal.style.display = 'flex';
+      spinner.style.display = 'block';
 
-      // Load event for iframe
-      iframe.onload = function () {
-        spinner.style.display = 'none'; // Hide spinner when iframe loads
+      iframe.onload = () => {
+        spinner.style.display = 'none';
       };
 
-      iframe.onerror = function () {
-        spinner.style.display = 'none'; // Hide spinner on error
-        iframe.src = ''; // Clear iframe src
-        displayFallbackMessage(); // Show fallback message
-      };
-
-      refreshPage(250000); // Refresh every 250 seconds
-      setTimeout(() => {
-        if (isAutoNavigating) {
-          autoNavigate();
-        }
-      }, 1000); // Delay the auto-navigation to allow for loading
-    }
-
-    function navigate(direction) {
-      const currentIndex = links.indexOf(document.querySelector('iframe').src);
-      const nextIndex = (currentIndex + direction + links.length) % links.length;
-      showModal(links[nextIndex]);
-    }
-
-    function autoNavigate() {
-      autoNavigateInterval = setInterval(() => {
-        navigate(1);
-      }, Math.floor(Math.random() * (30000 - 20000 + 1) + 20000));
-    }
-
-    function refreshPage(interval = 250000) {
-      setInterval(() => {
-        location.reload();
-      }, interval);
-    }
-
-    function displayFallbackMessage() {
-      const modalContent = document.querySelector('.modal-content');
-      const fallbackMessage = document.createElement('div');
-      fallbackMessage.className = 'fallback';
-      fallbackMessage.innerHTML = `
-        <i class="fas fa-exclamation-circle"></i>
-        <p>Failed to load the page.</p>
-        <p>Please try again later.</p>
-      `;
-      modalContent.appendChild(fallbackMessage);
-    }
-
-    function toggleAutoNavigate() {
-      isAutoNavigating = !isAutoNavigating;
-      const toggleButton = document.querySelector('.toggle-auto-nav');
-      toggleButton.innerText = isAutoNavigating ? 'Stop Auto-Navigation' : 'Start Auto-Navigation';
-      if (isAutoNavigating) {
-        autoNavigate(); // Restart auto-navigation if it was stopped
+      if (currentIndex >= links.length) {
+        // After the last link, refresh the page after a timeout
+        setTimeout(() => {
+          refreshPage();
+        }, 5000); // Wait 5 seconds before refreshing
       } else {
-        clearInterval(autoNavigateInterval); // Stop auto-navigation
+        clearInterval(autoNavigateInterval);
+        autoNavigateInterval = setInterval(() => {
+          navigate(1);
+        }, 30000); // Auto-navigate every 30 seconds
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const showModalBtn = document.querySelector('.show-modal-btn');
-      showModalBtn.addEventListener('click', () => {
-        showModal(links[0]); // Show first link on button click
-      });
+    function getCurrentLink() {
+      return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
+    }
 
-      const closeBtn = document.querySelector('.close');
-      closeBtn.addEventListener('click', () => {
-        document.querySelector('.modal').style.display = 'none'; // Close modal
-        clearInterval(autoNavigateInterval); // Stop auto-navigation
-      });
+    function navigate(direction) {
+      const totalLinks = links.length + 1;
+      currentIndex = (currentIndex + direction + totalLinks) % totalLinks;
+      showLink(currentIndex);
+    }
 
-      const nextButton = document.querySelector('.arrow-btn.next');
-      const prevButton = document.querySelector('.arrow-btn.prev');
-      nextButton.addEventListener('click', () => navigate(1)); // Navigate to next link
-      prevButton.addEventListener('click', () => navigate(-1)); // Navigate to previous link
+    function closeModal() {
+      document.getElementById('myModal').style.display = 'none';
+      document.getElementById('modalIframe').src = '';
+      clearInterval(autoNavigateInterval);
+    }
 
-      const toggleButton = document.querySelector('.toggle-auto-nav');
-      toggleButton.addEventListener('click', toggleAutoNavigate); // Toggle auto-navigation
-    });
+    window.onload = function () {
+      showLink(0); // Show the first link on load
+    };
   </script>
 </head>
 
 <body>
-  <button class="show-modal-btn">Show Modal</button>
-  <div class="modal">
+  <div id="myModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <span></span>
-        <div class="close">&times;</div>
+        <h2>OMG Link Viewer</h2>
+        <span class="close" onclick="closeModal()">&times;</span>
       </div>
-      <div class="spinner"></div>
-      <iframe></iframe>
+      <div class="spinner" id="spinner"></div>
+      <iframe id="modalIframe"></iframe>
       <div class="nav-buttons">
-        <button class="arrow-btn prev"><i class="fas fa-arrow-left"></i></button>
-        <button class="arrow-btn next"><i class="fas fa-arrow-right"></i></button>
+        <button class="arrow-btn" onclick="navigate(-1)"><i class="fas fa-arrow-left"></i></button>
+        <button class="arrow-btn" onclick="navigate(1)"><i class="fas fa-arrow-right"></i></button>
       </div>
-      <button class="go-btn" onclick="showModal(links[0])">Go to First Link</button>
-      <button class="toggle-auto-nav">Stop Auto-Navigation</button>
     </div>
   </div>
 </body>
