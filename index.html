@@ -3,12 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1024, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OMG</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* Your CSS styles here */
     * {
       margin: 0;
       padding: 0;
@@ -24,6 +23,7 @@
       justify-content: center;
       height: 100vh;
       overflow: hidden;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .modal {
@@ -37,13 +37,18 @@
       background: radial-gradient(circle at top left, rgba(73, 237, 0, 0.3), rgba(0, 0, 0, 0.85));
       align-items: center;
       justify-content: center;
+      animation: zoomIn 0.5s ease forwards;
     }
 
     .modal-content {
       background-color: #212121;
       width: 100%;
       height: 100%;
+      border-radius: 0;
+      text-align: center;
+      position: relative;
       color: #e0e0e0;
+      box-shadow: none;
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -57,11 +62,15 @@
       color: #49ed00;
     }
 
-    .close {
+    .modal-header .close {
       cursor: pointer;
       font-size: 1.8em;
       color: #49ed00;
       margin-right: 20px;
+    }
+
+    .modal-header .close:hover {
+      color: rgba(73, 237, 0, 0.7);
     }
 
     iframe {
@@ -69,6 +78,7 @@
       height: 100%;
       border: none;
       margin-top: 0;
+      box-shadow: none;
     }
 
     .spinner {
@@ -82,10 +92,17 @@
       display: none;
     }
 
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .nav-buttons {
       display: flex;
       justify-content: center;
       margin-top: 15px;
+      margin-bottom: 30px;
       gap: 30px;
     }
 
@@ -95,12 +112,80 @@
       color: #ffffff;
       background: none;
       border: none;
+      transition: color 0.3s;
     }
 
-    h1 {
-      text-align: center;
+    .arrow-btn:hover {
       color: #49ed00;
-      margin: 20px 0;
+    }
+
+    .go-btn {
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3em;
+      color: #ffffff;
+      background-color: #333;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 8px rgba(73, 237, 0, 0.3);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .go-btn:hover {
+      background-color: #49ed00;
+      color: #1a1a1a;
+    }
+
+    .fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+      gap: 10px;
+      flex-direction: column;
+      animation: fadeIn 1s ease forwards;
+      text-shadow: 0 0 5px rgba(73, 237, 0, 0.6), 0 0 10px rgba(73, 237, 0, 0.4), 0 0 15px rgba(73, 237, 0, 0.2);
+      transform: translateY(10px);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounce {
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .page-indicator {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #49ed00;
     }
   </style>
   <script>
@@ -113,8 +198,16 @@
       'https://www.profitablecpmrate.com/jb3a7bvuk?key=13d258dedbb6d045292b94cf56d5b6d3' // Dito ilalagay Direct Link
       
     ];
+    
     let currentIndex = 0;
     let autoNavigateInterval;
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
 
     function decodeBase64(encoded) {
       return decodeURIComponent(atob(encoded).split('').map(c =>
@@ -125,14 +218,18 @@
       location.reload(); // Refresh the page
     }
 
+    function getCurrentLink() {
+      return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
+    }
+
     function showLink(index) {
       currentIndex = index;
       const iframe = document.getElementById('modalIframe');
       const modal = document.getElementById('myModal');
       const spinner = document.getElementById('spinner');
-      const pageIndicator = document.getElementById('pageIndicator');
+      const pageIndicator = document.getElementById('pageIndicator'); // Get the page indicator
 
-      iframe.src = getCurrentLink();
+      iframe.src = getCurrentLink(); // Set the iframe source to the current link
       modal.style.display = 'flex';
       spinner.style.display = 'block';
 
@@ -140,7 +237,7 @@
         spinner.style.display = 'none';
       };
 
-      // Update page indicator
+      // Update page indicator based on currentIndex
       pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
 
       if (currentIndex >= links.length) {
@@ -151,13 +248,9 @@
       } else {
         clearInterval(autoNavigateInterval);
         autoNavigateInterval = setInterval(() => {
-          navigate(1);
-        }, 30000); // Auto-navigate every 30 seconds
+          navigate(1); // Automatically navigate to the next link every 30 seconds
+        }, 30000);
       }
-    }
-
-    function getCurrentLink() {
-      return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
     }
 
     function navigate(direction) {
@@ -166,33 +259,35 @@
       showLink(currentIndex);
     }
 
-    function closeModal() {
-      document.getElementById('myModal').style.display = 'none';
-      document.getElementById('modalIframe').src = '';
-      clearInterval(autoNavigateInterval);
+    function goToSite() {
+      window.open(getCurrentLink(), '_blank');
     }
 
-    window.onload = function () {
-      showLink(0); // Show the first link on load
+    window.onload = () => {
+      showLink(0); // Show the first link on page load
     };
   </script>
 </head>
 
 <body>
-  <h1 id="pageIndicator">First Page</h1> <!-- Page Indicator -->
   <div id="myModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>OMG Link Viewer</h2>
-        <span class="close" onclick="closeModal()">&times;</span>
+        <h1 class="page-indicator" id="pageIndicator">First Page</h1>
+        <button class="close" onclick="navigate(-1)">&times;</button>
       </div>
       <div class="spinner" id="spinner"></div>
-      <iframe id="modalIframe"></iframe>
+      <iframe id="modalIframe" src="" allowfullscreen></iframe>
       <div class="nav-buttons">
         <button class="arrow-btn" onclick="navigate(-1)"><i class="fas fa-arrow-left"></i></button>
         <button class="arrow-btn" onclick="navigate(1)"><i class="fas fa-arrow-right"></i></button>
       </div>
+      <button class="go-btn" onclick="goToSite()">Open Current Link <i class="fas fa-external-link-alt"></i></button>
     </div>
+  </div>
+  <div class="fallback">
+    <p>Loading...</p>
+    <p>If it doesn't load, check your network connection.</p>
   </div>
 </body>
 
