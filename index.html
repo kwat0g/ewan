@@ -237,7 +237,7 @@
       const spinner = document.getElementById('spinner');
       const pageIndicator = document.getElementById('pageIndicator'); // Get the page indicator
 
-      contentDiv.innerHTML = <iframe src="${getCurrentLink()}" width="100%" height="100%" frameborder="0"></iframe>; // Set the div content to the current link
+      contentDiv.innerHTML = `<iframe src="${getCurrentLink()}" width="100%" height="100%" frameborder="0"></iframe>`; // Set the div content to the current link
       modal.style.display = 'flex';
       spinner.style.display = 'block';
 
@@ -249,7 +249,7 @@
       };
 
       // Update page indicator based on currentIndex
-      pageIndicator.textContent = currentIndex === 0 ? "First Page" : Page ${currentIndex};
+      pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
 
       if (currentIndex >= links.length) {
         // After the last link, refresh the page after a timeout
