@@ -201,74 +201,79 @@
       'https://plainsenlargecoronation.com/xf6huhctn?key=d3e4e1027efc1ec8b2d940e9ec589111'
       
     ];
-    
-    let currentIndex = 0;
-    let autoNavigateInterval;
 
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+let currentIndex = 0;
+let autoNavigateInterval;
 
-    function decodeBase64(encoded) {
-      return decodeURIComponent(atob(encoded).split('').map(c =>
-        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-    }
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
-    function refreshPage() {
-      location.reload(); // Refresh the page
-    }
+function decodeBase64(encoded) {
+  return decodeURIComponent(atob(encoded).split('').map(c =>
+    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+}
 
-    function getCurrentLink() {
-      return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
-    }
+function refreshPage() {
+  location.reload(); // Refresh the page
+}
 
-    function showLink(index) {
-      currentIndex = index;
-      const iframe = document.getElementById('modalIframe');
-      const modal = document.getElementById('myModal');
-      const spinner = document.getElementById('spinner');
-      const pageIndicator = document.getElementById('pageIndicator'); // Get the page indicator
+function getCurrentLink() {
+  return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
+}
 
-      iframe.src = getCurrentLink(); // Set the iframe source to the current link
-      modal.style.display = 'flex';
-      spinner.style.display = 'block';
+function showLink(index) {
+  currentIndex = index;
+  const iframe = document.getElementById('modalIframe');
+  const modal = document.getElementById('myModal');
+  const spinner = document.getElementById('spinner');
+  const pageIndicator = document.getElementById('pageIndicator'); // Get the page indicator
 
-      iframe.onload = () => {
-        spinner.style.display = 'none';
-      };
+  iframe.src = getCurrentLink(); // Set the iframe source to the current link
+  modal.style.display = 'flex';
+  spinner.style.display = 'block';
 
-      // Update page indicator based on currentIndex
-      pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
+  // Wait for iframe to load before starting countdown
+  iframe.onload = () => {
+    spinner.style.display = 'none';
+    startAutoNavigate(); // Start the countdown to the next link after loading
+  };
 
-      if (currentIndex >= links.length) {
-        // After the last link, refresh the page after a timeout
-        setTimeout(() => {
-          refreshPage();
-        }, 5000); // Wait 5 seconds before refreshing
-      } else {
-        clearInterval(autoNavigateInterval);
-        autoNavigateInterval = setInterval(() => {
-          navigate(1); // Automatically navigate to the next link every 30 seconds
-        }, 30000);
-      }
-    }
+  // Update page indicator based on currentIndex
+  pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
 
-    function navigate(direction) {
-      const totalLinks = links.length + 1;
-      currentIndex = (currentIndex + direction + totalLinks) % totalLinks;
-      showLink(currentIndex);
-    }
+  if (currentIndex >= links.length) {
+    // After the last link, refresh the page after a timeout
+    setTimeout(() => {
+      refreshPage();
+    }, 5000); // Wait 5 seconds before refreshing
+  }
+}
 
-    function goToSite() {
-      window.open(getCurrentLink(), '_blank');
-    }
+function startAutoNavigate() {
+  clearInterval(autoNavigateInterval); // Clear any existing interval
+  autoNavigateInterval = setInterval(() => {
+    navigate(1); // Automatically navigate to the next link every 30 seconds
+  }, 10000); // Adjust the time interval as necessary
+}
 
-    window.onload = () => {
-      showLink(0); // Show the first link on page load
-    };
+function navigate(direction) {
+  const totalLinks = links.length + 1;
+  currentIndex = (currentIndex + direction + totalLinks) % totalLinks;
+  showLink(currentIndex);
+}
+
+function goToSite() {
+  window.open(getCurrentLink(), '_blank');
+}
+
+window.onload = () => {
+  showLink(0); // Show the first link on page load
+};
+
   </script>
 </head>
 
@@ -288,7 +293,7 @@
       <button class="go-btn" onclick="goToSite()">Open Current Link <i class="fas fa-external-link-alt"></i></button>
     </div>
   </div>
-  <div class="fallback">
+  <div class="fallback" id="fallbackMessage">
     <p>Loading...</p>
     <p>If it doesn't load, check your network connection.</p>
   </div>
