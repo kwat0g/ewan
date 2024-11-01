@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=1024, initial-scale=1.0, user-scalable=no">
   <title>OMG</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -96,17 +96,23 @@
       background: none;
       border: none;
     }
+
+    h1 {
+      text-align: center;
+      color: #49ed00;
+      margin: 20px 0;
+    }
   </style>
   <script>
     const referenceCode = 'aHR0cHM6Ly9wZXJpbGFzdHJvbmF1dC5jb20vbmFkbTV2NDF1P2tleT02ZmEzOGYzNTkxYjRjYzZlMTFkNTFlOWM0NjU1ZGZjZQ==';
 
     let links = [
-      'https://www.profitablecpmrate.com/vq7ktms6jb?key=5c9978b707da4810252e42cb5f721af0',
-      'https://www.profitablecpmrate.com/pum87zv1z?key=77c7b184a771b312e0e774039be509db',
-      'https://www.profitablecpmrate.com/jb2c0eztk1?key=80fa6e07716a979d9c8dc0128c6e4177',
-      'https://www.profitablecpmrate.com/jb3a7bvuk?key=13d258dedbb6d045292b94cf56d5b6d3'
+      'https://www.profitablecpmrate.com/vq7ktms6jb?key=5c9978b707da4810252e42cb5f721af0', // Dito ilalagay Direct Link
+      'https://www.profitablecpmrate.com/pum87zv1z?key=77c7b184a771b312e0e774039be509db', // Dito ilalagay Direct Link
+      'https://www.profitablecpmrate.com/jb2c0eztk1?key=80fa6e07716a979d9c8dc0128c6e4177', // Dito ilalagay Direct Link
+      'https://www.profitablecpmrate.com/jb3a7bvuk?key=13d258dedbb6d045292b94cf56d5b6d3' // Dito ilalagay Direct Link
+      
     ];
-
     let currentIndex = 0;
     let autoNavigateInterval;
 
@@ -124,6 +130,8 @@
       const iframe = document.getElementById('modalIframe');
       const modal = document.getElementById('myModal');
       const spinner = document.getElementById('spinner');
+      const pageIndicator = document.getElementById('pageIndicator');
+
       iframe.src = getCurrentLink();
       modal.style.display = 'flex';
       spinner.style.display = 'block';
@@ -131,6 +139,9 @@
       iframe.onload = () => {
         spinner.style.display = 'none';
       };
+
+      // Update page indicator
+      pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
 
       if (currentIndex >= links.length) {
         // After the last link, refresh the page after a timeout
@@ -168,6 +179,7 @@
 </head>
 
 <body>
+  <h1 id="pageIndicator">First Page</h1> <!-- Page Indicator -->
   <div id="myModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
