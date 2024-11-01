@@ -73,12 +73,15 @@
       color: rgba(73, 237, 0, 0.7);
     }
 
-    iframe {
+    .content {
       width: 100%;
       height: 100%;
       border: none;
       margin-top: 0;
       box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .spinner {
@@ -160,6 +163,7 @@
         opacity: 0;
         transform: translateY(20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -174,9 +178,11 @@
       100% {
         transform: translateY(0);
       }
+
       40% {
         transform: translateY(-10px);
       }
+
       60% {
         transform: translateY(-5px);
       }
@@ -199,80 +205,80 @@
       'https://plainsenlargecoronation.com/e27mqpbyq4?key=3e554d91ac93b90c3a9c97ba86ed6d98',
       'https://plainsenlargecoronation.com/n999th6bj?key=50597134c33de888ac69dbadff04e7de',
       'https://plainsenlargecoronation.com/xf6huhctn?key=d3e4e1027efc1ec8b2d940e9ec589111'
-      
     ];
 
-let currentIndex = 0;
-let autoNavigateInterval;
+    let currentIndex = 0;
+    let autoNavigateInterval;
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
 
-function decodeBase64(encoded) {
-  return decodeURIComponent(atob(encoded).split('').map(c =>
-    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-}
+    function decodeBase64(encoded) {
+      return decodeURIComponent(atob(encoded).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    }
 
-function refreshPage() {
-  location.reload(); // Refresh the page
-}
+    function refreshPage() {
+      location.reload(); // Refresh the page
+    }
 
-function getCurrentLink() {
-  return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
-}
+    function getCurrentLink() {
+      return currentIndex === 0 ? decodeBase64(referenceCode) : links[currentIndex - 1];
+    }
 
-function showLink(index) {
-  currentIndex = index;
-  const iframe = document.getElementById('modalIframe');
-  const modal = document.getElementById('myModal');
-  const spinner = document.getElementById('spinner');
-  const pageIndicator = document.getElementById('pageIndicator'); // Get the page indicator
+    function showLink(index) {
+      currentIndex = index;
+      const contentDiv = document.getElementById('contentDiv');
+      const modal = document.getElementById('myModal');
+      const spinner = document.getElementById('spinner');
+      const pageIndicator = document.getElementById('pageIndicator'); // Get the page indicator
 
-  iframe.src = getCurrentLink(); // Set the iframe source to the current link
-  modal.style.display = 'flex';
-  spinner.style.display = 'block';
+      contentDiv.innerHTML = `<iframe src="${getCurrentLink()}" width="100%" height="100%" frameborder="0"></iframe>`; // Set the div content to the current link
+      modal.style.display = 'flex';
+      spinner.style.display = 'block';
 
-  // Wait for iframe to load before starting countdown
-  iframe.onload = () => {
-    spinner.style.display = 'none';
-    startAutoNavigate(); // Start the countdown to the next link after loading
-  };
+      // Wait for iframe to load before starting countdown
+      const iframe = contentDiv.querySelector('iframe');
+      iframe.onload = () => {
+        spinner.style.display = 'none';
+        startAutoNavigate(); // Start the countdown to the next link after loading
+      };
 
-  // Update page indicator based on currentIndex
-  pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
+      // Update page indicator based on currentIndex
+      pageIndicator.textContent = currentIndex === 0 ? "First Page" : `Page ${currentIndex}`;
 
-  if (currentIndex >= links.length) {
-    // After the last link, refresh the page after a timeout
-    setTimeout(() => {
-      refreshPage();
-    }, 5000); // Wait 5 seconds before refreshing
-  }
-}
+      if (currentIndex >= links.length) {
+        // After the last link, refresh the page after a timeout
+        setTimeout(() => {
+          refreshPage();
+        }, 5000); // Wait 5 seconds before refreshing
+      }
+    }
 
-function startAutoNavigate() {
-  clearInterval(autoNavigateInterval); // Clear any existing interval
-  autoNavigateInterval = setInterval(() => {
-    navigate(1); // Automatically navigate to the next link every 30 seconds
-  }, 10000); // Adjust the time interval as necessary
-}
+    function startAutoNavigate() {
+      clearInterval(autoNavigateInterval); // Clear any existing interval
+      autoNavigateInterval = setInterval(() => {
+        navigate(1); // Automatically navigate to the next link every 30 seconds
+      }, 10000); // Adjust the time interval as necessary
+    }
 
-function navigate(direction) {
-  const totalLinks = links.length + 1;
-  currentIndex = (currentIndex + direction + totalLinks) % totalLinks;
-  showLink(currentIndex);
-}
+    function navigate(direction) {
+      const totalLinks = links.length + 1;
+      currentIndex = (currentIndex + direction + totalLinks) % totalLinks;
+      showLink(currentIndex);
+    }
 
-function goToSite() {
-  window.open(getCurrentLink(), '_blank');
-}
+    function goToSite() {
+      window.open(getCurrentLink(), '_blank');
+    }
 
-window.onload = () => {
-  showLink(0); // Show the first link on page load
-};
+    window.onload = () => {
+      showLink(0); // Show the first link on page load
+    };
 
   </script>
 </head>
@@ -285,7 +291,9 @@ window.onload = () => {
         <button class="close" onclick="navigate(-1)">&times;</button>
       </div>
       <div class="spinner" id="spinner"></div>
-      <iframe id="modalIframe" src="" allowfullscreen></iframe>
+      <div class="content" id="contentDiv">
+        <!-- The content will be loaded here -->
+      </div>
       <div class="nav-buttons">
         <button class="arrow-btn" onclick="navigate(-1)"><i class="fas fa-arrow-left"></i></button>
         <button class="arrow-btn" onclick="navigate(1)"><i class="fas fa-arrow-right"></i></button>
